@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Invader</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            background-color: black;
+        }
+        p{
+            position: absolute;
+            z-index: 10;
+            color: white;
+            margin: 0;
+            top: 1rem;
+            left: 1rem;
+            font-family: sans-serif;
+            font-size: larger;
+        }
+        #ending{
+            font-size: 15rem;
+            color: red;
+            font-family: sans-serif;
+            margin-top: 5rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: relative;">
+        <p><span>Score:</span> <span id="scoreElement">0</span></p>
+        <!-- <iframe src="silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe> -->
+        <!-- <audio controls autoplay"> -->
+            <!-- <source src="./audio/background-music-light.mp3" type="audio/mpeg" /> -->
+            <!-- <source src="./audio/background-music-light.mp3" type="audio/ogg" /> -->
+            <!-- <source src="./audio/background-music-light.mp3" type="audio/wav" /> -->
+        <!-- </audio> -->
+        <div id="ending">GAME OVER</div>
+        <canvas></canvas>
+    </div>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+            integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    ></script>
+    <script src="script.js"></script>
+</body>
+</html>
