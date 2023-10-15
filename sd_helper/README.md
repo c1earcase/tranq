@@ -137,6 +137,7 @@ You can tail the sd log file (in a separate ssh session) to see how it's working
 
 ```
 tail -100f /workspace/onstart.log
+tail -100f /workspace/stable-diffusion-webui/onstart.log
 ```
 
 Once all the mp4s are generated, I COULD bring them back down to my machine.
