@@ -25,7 +25,8 @@ once your instance is up, we can do some damage
 NOTE: my environment is Windows with WSL2 and I have I have a python venv in ~/venv_3.
 
 ```
-python -m venv ~/venv_3
+#apt install python3-venv
+python3 -m venv ~/venv_3
 source ~/venv_3/bin/activate
 pip install --upgrade vastai;
 ```
