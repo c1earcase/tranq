@@ -47,9 +47,47 @@
     background-color: #ef4444;
     width: 100%;
   }
+
+  .center-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+  }
+
+  .center-popup p {
+      margin-bottom: 10px;
+  }
+
+  /* Optional overlay to cover the background */
+  .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      <!-- background: rgba(0, 0, 0, 0.5); -->
+      z-index: 999;
+  }
+
 </style>
 </head>
 <body class="bg-white text-black">
+
+<div id="popup" class="center-popup">
+  <p>
+  move mouse up and down, click to shoot </br>
+  mueve el mouse hacia arriba y hacia abajo, haz clic para disparar
+  </p>
+</div>
+<div class="overlay"></div>
 
 <div id="game" class="relative h-screen overflow-hidden">
   <div id="player1" class="player1 absolute bottom-0 left-0 w-24 h-24 bg-white-500"></div>
@@ -60,15 +98,40 @@
 </div>
 
 <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
-        integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
+  src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+  integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
 ></script>
 <script src="audio.js"></script>
 <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var popup = document.getElementById('popup');
+    var overlay = document.querySelector('.overlay');
+
+    // Show the pop-up when the page loads
+    popup.style.display = 'block';
+    overlay.style.display = 'block';
+
+    // Hide the pop-up and overlay after 5 seconds
+    setTimeout(function() {
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
+    }, 5000);
+
+  });
+
   var  enemyMoveInterval = 0
   var  enemyFireInterval = 0
+
+  function startGame() {
+    enemyMoveInterval = setInterval(moveEnemy, 50);
+    enemyFireInterval = setInterval(fireWord, 2000);
+    audio.backgroundMusic.play();
+    audio.start.play();
+  }
+
   const player1 = document.getElementById('player1');
   const enemy = document.getElementById('enemy');
   const healthBar = document.getElementById('health');
@@ -165,14 +228,7 @@
     player1.style.top = e.clientY + 'px';
   });
   
-  function startGame() {
-    enemyMoveInterval = setInterval(moveEnemy, 50);
-    enemyFireInterval = setInterval(fireWord, 2000);
-  }
-
   window.addEventListener("click", () => {
-    audio.backgroundMusic.play();
-    audio.start.play();
     startGame()
     console.log("start!");
   }, { once: true });
