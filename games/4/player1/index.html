@@ -16,12 +16,12 @@
     background-size: cover;
   }
   .enemy {
-    background-image: url('media/1.gif');
+    background-image: url('media/1.mp4');
     background-size: cover;
     box-shadow: 0 0 8px 8px white inset;
   }
   .enemy.hit {
-    background-image: url('media/2.gif');
+    background-image: url('media/2.mp4');
   }
   .bullet {
     background-color: #59A3D3;
@@ -217,7 +217,7 @@
       enemy.classList.add('hit');
       clearInterval(enemyMoveInterval);
       clearInterval(enemyFireInterval);
-      enemy.style.backgroundImage = "url('media/3b.gif')";
+      enemy.style.backgroundImage = "url('media/3b.mp4')";
       audio.gameOver.play();
       enemyMoveInterval = 0
     }
