@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Prototype</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.7.4/dist/forms.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+  .player1 {
+    background-image: url('media/arg_nobg.png');
+    background-size: cover;
+  }
+  .enemy {
+    background-image: url('media/1.gif');
+    background-size: cover;
+    box-shadow: 0 0 8px 8px white inset;
+  }
+  .enemy.hit {
+    background-image: url('media/2.gif');
+  }
+  .bullet {
+    background-color: #59A3D3;
+    box-shadow: 0 0 4px 4px white inset;
+  }
+  .word-bullet {
+    position: absolute;
+    right: 0;
+    white-space: nowrap;
+    font-style: italic;
+  }
+  .health-bar {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 20px;
+    background-color: #e5e7eb;
+  }
+  .health {
+    height: 100%;
+    background-color: #ef4444;
+    width: 100%;
+  }
+</style>
+</head>
+<body class="bg-white text-black">
+
+<div id="game" class="relative h-screen overflow-hidden">
+  <div id="player1" class="player1 absolute bottom-0 left-0 w-24 h-24 bg-white-500"></div>
+  <div id="enemy" class="enemy absolute right-0 top-0 w-64 h-64"></div>
+  <div class="health-bar">
+    <div class="health" id="health"></div>
+  </div>
+</div>
+
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+        integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+<script src="audio.js"></script>
+<script>
+  var  enemyMoveInterval = 0
+  var  enemyFireInterval = 0
+  const player1 = document.getElementById('player1');
+  const enemy = document.getElementById('enemy');
+  const healthBar = document.getElementById('health');
+  let enemyHealth = 10;
+  let enemyDirection = 1;
+  const words_in_english = ["Austerity Measures","Economic Cutbacks","Restrictive Policies","Individual Freedoms Curtailed",
+                 "Social Safety Net Reduction","Regressive Reforms",                  
+                 "Economic Inequality","Dismantling Social Programs",
+                 "Stricter Regulations","Social Welfare Reduction",
+                ];
+  const words_in_spanish = [
+        "Medidas de Austeridad","Recortes Económicos",
+        "Políticas Restrictivas","Limitación de Libertades Individuales",
+        "Reducción de la Red de Seguridad Social","Reformas Regresivas","Reducción de Asistencia Social",
+        "Desigualdad Económica","Desmantelamiento de Programas Sociales","Regulaciones Más Estrictas",
+        ];
+  const words = words_in_spanish;
+  function moveEnemy() {
+    const enemyRect = enemy.getBoundingClientRect();
+    const gameRect = document.getElementById('game').getBoundingClientRect();
+    let top = enemy.offsetTop + enemyDirection * 8;
+    if (top <= 0 || top >= gameRect.height - enemyRect.height) {
+      enemyDirection *= -1;
+    }
+    enemy.style.top = top + 'px';
+  }
+  
+  function fireWord() {
+    const word = words[Math.floor(Math.random() * words.length)];
+    const wordBullet = document.createElement('div');
+    wordBullet.textContent = word;
+    wordBullet.className = 'word-bullet';
+    wordBullet.style.top = enemy.offsetTop + 'px';
+    document.getElementById('game').appendChild(wordBullet);
+    
+    function moveWordBullet() {
+      if (wordBullet.offsetLeft + wordBullet.offsetWidth < 0) {
+        wordBullet.remove();
+      } else {
+        wordBullet.style.left = wordBullet.offsetLeft - 6 + 'px';
+        requestAnimationFrame(moveWordBullet);
+      }
+    }
+    requestAnimationFrame(moveWordBullet);
+  }
+  
+  function fireBullet() {
+    audio.shoot.play();
+    const bullet = document.createElement('div');
+    bullet.className = 'bullet absolute bottom-0 left-0 w-5 h-5';
+    bullet.style.top = player1.offsetTop + 40 + 'px';
+    document.getElementById('game').appendChild(bullet);
+    
+    function moveBullet() {
+      if (bullet.offsetLeft > document.body.clientWidth) {
+        bullet.remove();
+      } else {
+        bullet.style.left = bullet.offsetLeft + 8 + 'px';
+        checkCollision(bullet);
+        requestAnimationFrame(moveBullet);
+      }
+    }
+    requestAnimationFrame(moveBullet);
+  }
+  
+  function checkCollision(bullet) {
+    const bulletRect = bullet.getBoundingClientRect();
+    const enemyRect = enemy.getBoundingClientRect();
+    if (bulletRect.right > enemyRect.left &&
+        bulletRect.bottom > enemyRect.top &&
+        bulletRect.top < enemyRect.bottom) {
+      bullet.remove();
+      hitEnemy();
+    }
+  }
+  
+  function hitEnemy() {
+    enemyHealth -= 1;
+    healthBar.style.width = (enemyHealth * 10) + '%';
+    enemy.classList.add('hit');
+    setTimeout(() => enemy.classList.remove('hit'), 100);
+    if (enemyHealth <= 0) {
+      enemy.classList.add('hit');
+      clearInterval(enemyMoveInterval);
+      clearInterval(enemyFireInterval);
+      enemy.style.backgroundImage = "url('media/3b.gif')";
+      audio.gameOver.play();
+      enemyMoveInterval = 0
+    }
+  }
+  
+  document.addEventListener('click', fireBullet);
+  document.addEventListener('mousemove', (e) => {
+    player1.style.top = e.clientY + 'px';
+  });
+  
+  function startGame() {
+    enemyMoveInterval = setInterval(moveEnemy, 50);
+    enemyFireInterval = setInterval(fireWord, 2000);
+  }
+
+  window.addEventListener("click", () => {
+    audio.backgroundMusic.play();
+    audio.start.play();
+    startGame()
+    console.log("start!");
+  }, { once: true });
+</script>
+
+</body>
+</html>
