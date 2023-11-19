@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punch Interaction</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @keyframes jitter {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+  }
+</style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <div class="flex flex-col items-center">
+    <div id="image-container" class="mb-4">
+      <img id="image1" src="media/jm_1_640.png" alt="Image1" class="block w-auto h-auto bg-gray-300" style="display: block;">
+      <img id="image2" src="media/jm_2.gif" alt="Image2" class="hidden w-auto h-auto bg-gray-500" style="display: none;">
+    </div>
+    <button id="punch-button" class="p-8 bg-black text-white font-bold rounded">
+      punch
+    </button>
+  </div>
+
+  <audio id="punch-sound" src="media/punch.mp3"></audio>
+
+  <script>
+    const punchButton = document.getElementById('punch-button');
+    const image1 = document.getElementById('image1');
+    const image2 = document.getElementById('image2');
+    const punchSound = document.getElementById('punch-sound');
+
+    punchButton.addEventListener('click', () => {
+      // Play punch sound
+      punchSound.play();
+
+      // Switch images
+      image1.style.display = 'none';
+      image2.style.display = 'block';
+
+      setTimeout(() => {
+        image1.style.display = 'block';
+        image2.style.display = 'none';
+      }, 800);
+
+      // Animate the button
+      punchButton.style.animation = 'jitter 0.1s ease-in-out 0s infinite';
+      setTimeout(() => {
+        punchButton.style.animation = '';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
