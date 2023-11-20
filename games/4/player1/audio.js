@@ -4,12 +4,12 @@ const audio = {
         src: './audio/background-music.mp3',
         loop: true
     }),
-    enemyShoot: new Howl({
-        src: './audio/enemyShoot.wav'
-    }),
-    explode: new Howl({
-        src: './audio/explode.wav'
-    }),
+    // enemyShoot: new Howl({
+        // src: './audio/enemyShoot.wav'
+    // }),
+    // explode: new Howl({
+        // src: './audio/explode.wav'
+    // }),
     gameOver: new Howl({
         src: './audio/gameOver.mp3'
     }),
