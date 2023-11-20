@@ -12,16 +12,16 @@
     font-family: 'Roboto', sans-serif;
   }
   .player1 {
-    background-image: url('media/arg_nobg.png');
+    background-image: url("../media/arg_nobg.png");
     background-size: cover;
   }
   .enemy {
-    background-image: url('media/1.mp4');
+    background-image: url("../media/1.mp4");
     background-size: cover;
     box-shadow: 0 0 8px 8px white inset;
   }
   .enemy.hit {
-    background-image: url('media/2.mp4');
+    background-image: url("../media/2.mp4");
   }
   .bullet {
     background-color: #59A3D3;
@@ -217,7 +217,7 @@
       enemy.classList.add('hit');
       clearInterval(enemyMoveInterval);
       clearInterval(enemyFireInterval);
-      enemy.style.backgroundImage = "url('media/3b.mp4')";
+      enemy.style.backgroundImage = "url('../media/3b.mp4')";
       audio.gameOver.play();
       enemyMoveInterval = 0
     }
