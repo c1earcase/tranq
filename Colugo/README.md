@@ -24,6 +24,13 @@ find processed/ -name *.wav | wc -l
 256                                  
 ```
 
+#### save space by only keeping wavs/processed/loop
+
+```
+rm -rf wavs/processed/oneshot
+rm -rf wavs/raw
+```
+
 #### generate index.html
 
 ```
