@@ -8,6 +8,8 @@ curl https://random-word-api.herokuapp.com/word?number=10
 ["soaps","corniest","sweethearts","swathers","trunnion","angelic","courants","permeable","stream","cloddy"]
 ```
 
+or try https://github.com/dwyl/english-words/blob/master/words.txt
+
 #### copy and paste to [words.txt](words.txt)
 
 <img src="https://github.com/c1earcase/tranq/assets/8038214/6956958d-6251-4a74-bef9-0c710448836f" width=200>
