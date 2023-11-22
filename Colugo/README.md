@@ -36,7 +36,7 @@ rm -rf wavs/raw
 #### generate index.html
 
 ```
-python gen.py
+python gen_index.py
 ```
 
 #### start a simple.http sever to serve up index.html locally
