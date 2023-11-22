@@ -1,8 +1,17 @@
 import glob
 import hashlib
 import random
+import string
+import argparse
 
 def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--source")
+  args = parser.parse_args()
+  source = ""
+  if args.source is not None:
+    source = args.source + "/"
+  wavs = glob.glob(f"{source}wavs/processed/loop/*wav")
 
   with open('head.html', 'r') as file:
     head = file.read()
@@ -12,12 +21,12 @@ def main():
     index.write(head)
     index.write("\n")
 
-    wavs = glob.glob("wavs/processed/loop/*wav")
     for i in range(len(wavs)):
       wav = wavs[i]
       # wav_id = hashlib.md5(open(wav,'rb').read()).hexdigest()
       # wav_id = wav_id[20:]
-      wav_id = wav[-15:-4]
+      # wav_id = wav[-15:-4]
+      wav_id = rand_str = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
       # index.writelines('<div class="row">\n')
       font_size = round(random.uniform(0.5, 4), 2)
       div_audio = f"""<div class="audio-file">
