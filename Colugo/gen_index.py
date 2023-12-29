@@ -12,6 +12,7 @@ def main():
   if args.source is not None:
     source = args.source + "/"
   wavs = glob.glob(f"{source}wavs/processed/loop/*wav")
+  random.shuffle(wavs)
 
   with open('head.html', 'r') as file:
     head = file.read()
@@ -49,3 +50,25 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+def chunks(lst, n):
+  for i in range(0, len(lst), n):
+    yield lst[i:i + n]
+
+divs = []
+with open("a.txt", 'r') as f:
+  lines = f.read().splitlines()
+  divs = list(chunks(lines,4))
+
+random.shuffle(divs)
+print(divs[0])
+
+output = open('output.txt', 'w')
+for i in range(len(divs)):
+  div = ''.join(divs[i])
+  output.write(div)
+  # print(div)
+output.close()
+
