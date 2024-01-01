@@ -3,28 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>esta todo arreglado!</title>
+<title>Kill them. Kill them all.</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.7.4/dist/forms.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/dist/forms.min.js"></script> -->
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
   body {
     font-family: 'Roboto', sans-serif;
   }
   .player1 {
-    background-image: url('media/arg_nobg.png');
-    background-size: cover;
-  }
-  .enemy {
-    background-image: url('media/1.gif');
-    background-size: cover;
-    box-shadow: 0 0 8px 8px white inset;
-  }
-  .enemy.hit {
-    background-image: url('media/2.gif');
-  }
-  .enemy.dead {
-    background-image: url('media/3b.gif');
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: 2px 2px 10px 2px rgba(0,0,0,1);
+    top: calc(50% - 48px);
+    <!-- box-shadow: 0 0 2px 2px white inset; -->
   }
   .bullet {
     background-color: #59A3D3;
@@ -32,9 +26,10 @@
   }
   .word-bullet {
     position: absolute;
-    right: 0;
+    right: 256px;
     white-space: nowrap;
-    font-style: italic;
+    <!-- font-size: large; -->
+    <!-- font-style: italic; -->
   }
   .health-bar {
     position: absolute;
@@ -50,7 +45,6 @@
     background-color: #ef4444;
     width: 100%;
   }
-
   .center-popup {
       display: none;
       position: fixed;
@@ -63,11 +57,9 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       z-index: 1000;
   }
-
   .center-popup p {
       margin-bottom: 10px;
   }
-
   /* Optional overlay to cover the background */
   .overlay {
       display: none;
@@ -78,6 +70,27 @@
       height: 100%;
       <!-- background: rgba(0, 0, 0, 0.5); -->
       z-index: 999;
+  }
+  <!-- .enemy_container { -->
+    <!-- overflow: hidden; -->
+    <!-- top: calc(50% - 128px); -->
+    <!-- width: 256px; -->
+    <!-- height: 256px; -->
+    <!-- border-radius: 10%; -->
+    <!-- background-image: url('media/enemy/assets/4_256.png'); -->
+  <!-- } -->
+  .enemy {
+    overflow: hidden;
+    top: calc(50% - 128px);
+    <!-- background: rgba(0, 0, 0, 0.5); -->
+    <!-- box-shadow: 0 0 8px 8px white inset; -->
+  }
+  .enemy video {
+    width: 100%;
+    height: 100%;
+    border-radius: 20%;
+    box-shadow: 2px 2px 20px 2px rgba(0,0,0,1);
+    object-fit: cover; /* This will handle video aspect ratios */
   }
 
 </style>
@@ -93,8 +106,21 @@
 <div class="overlay"></div>
 
 <div id="game" class="relative h-screen overflow-hidden">
-  <div id="player1" class="player1 absolute bottom-0 left-0 w-24 h-24 bg-white-500"></div>
-  <div id="enemy" class="enemy absolute right-0 top-0 w-64 h-64"></div>
+  <!-- https://tailwindcss.com/docs/width -->
+  <div id="player1" class="player1 absolute left-0 w-24 h-24 bg-white-500">
+    <video autoplay loop muted playsinline>
+      <source src="media/hero/simon/simon.webm" type="video/webm">
+    </video>
+  </div>
+
+  <!-- <div id="enemy_container" class="enemy_container absolute right-0 w-64 h-64"> -->
+  <!-- </div> -->
+  <div id="enemy" class="enemy absolute right-0 w-64 h-64">
+    <video autoplay loop muted playsinline>
+      <source src="media/enemy/hippo/head.webm" type="video/webm">
+    </video>
+  </div>
+
   <div class="health-bar">
     <div class="health" id="health"></div>
   </div>
@@ -103,139 +129,25 @@
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
   integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
+  crossorigin="anonymous" referrerpolicy="no-referrer"
 ></script>
 <script src="audio.js"></script>
-<script>
+<script src="javascript/src/utils.js"></script> 
+<script src="javascript/src/game.js"></script> 
+<!-- <script> -->
+  <!-- document.addEventListener('DOMContentLoaded', function() { -->
+    <!-- var popup = document.getElementById('popup'); -->
+    <!-- var overlay = document.querySelector('.overlay'); -->
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var popup = document.getElementById('popup');
-    var overlay = document.querySelector('.overlay');
+    <!-- popup.style.display = 'block'; -->
+    <!-- overlay.style.display = 'block'; -->
 
-    // Show the pop-up when the page loads
-    popup.style.display = 'block';
-    overlay.style.display = 'block';
-
-    // Hide the pop-up and overlay after 5 seconds
-    setTimeout(function() {
-        popup.style.display = 'none';
-        overlay.style.display = 'none';
-    }, 5000);
-
-  });
-
-  var  enemyMoveInterval = 0
-  var  enemyFireInterval = 0
-
-  function startGame() {
-    enemyMoveInterval = setInterval(moveEnemy, 50);
-    enemyFireInterval = setInterval(fireWord, 2000);
-    audio.backgroundMusic.play();
-    audio.start.play();
-  }
-
-  const player1 = document.getElementById('player1');
-  const enemy = document.getElementById('enemy');
-  const healthBar = document.getElementById('health');
-  let enemyHealth = 10;
-  let enemyDirection = 1;
-  const words_in_english = ["Austerity Measures","Economic Cutbacks","Restrictive Policies","Individual Freedoms Curtailed",
-                 "Social Safety Net Reduction","Regressive Reforms",                  
-                 "Economic Inequality","Dismantling Social Programs",
-                 "Stricter Regulations","Social Welfare Reduction",
-                ];
-  const words_in_spanish = [
-        "Medidas de Austeridad","Recortes Económicos",
-        "Políticas Restrictivas","Limitación de Libertades Individuales",
-        "Reducción de la Red de Seguridad Social","Reformas Regresivas","Reducción de Asistencia Social",
-        "Desigualdad Económica","Desmantelamiento de Programas Sociales","Regulaciones Más Estrictas",
-        ];
-  const words = words_in_spanish;
-  function moveEnemy() {
-    const enemyRect = enemy.getBoundingClientRect();
-    const gameRect = document.getElementById('game').getBoundingClientRect();
-    let top = enemy.offsetTop + enemyDirection * 8;
-    if (top <= 0 || top >= gameRect.height - enemyRect.height) {
-      enemyDirection *= -1;
-    }
-    enemy.style.top = top + 'px';
-  }
-  
-  function fireWord() {
-    const word = words[Math.floor(Math.random() * words.length)];
-    const wordBullet = document.createElement('div');
-    wordBullet.textContent = word;
-    wordBullet.className = 'word-bullet';
-    wordBullet.style.top = enemy.offsetTop + 'px';
-    document.getElementById('game').appendChild(wordBullet);
-    
-    function moveWordBullet() {
-      if (wordBullet.offsetLeft + wordBullet.offsetWidth < 0) {
-        wordBullet.remove();
-      } else {
-        wordBullet.style.left = wordBullet.offsetLeft - 6 + 'px';
-        requestAnimationFrame(moveWordBullet);
-      }
-    }
-    requestAnimationFrame(moveWordBullet);
-  }
-  
-  function fireBullet() {
-    audio.shoot.play();
-    const bullet = document.createElement('div');
-    bullet.className = 'bullet absolute bottom-0 left-0 w-5 h-5';
-    bullet.style.top = player1.offsetTop + 40 + 'px';
-    document.getElementById('game').appendChild(bullet);
-    
-    function moveBullet() {
-      if (bullet.offsetLeft > document.body.clientWidth) {
-        bullet.remove();
-      } else {
-        bullet.style.left = bullet.offsetLeft + 8 + 'px';
-        checkCollision(bullet);
-        requestAnimationFrame(moveBullet);
-      }
-    }
-    requestAnimationFrame(moveBullet);
-  }
-  
-  function checkCollision(bullet) {
-    const bulletRect = bullet.getBoundingClientRect();
-    const enemyRect = enemy.getBoundingClientRect();
-    if (bulletRect.right > enemyRect.left &&
-        bulletRect.bottom > enemyRect.top &&
-        bulletRect.top < enemyRect.bottom) {
-      bullet.remove();
-      hitEnemy();
-    }
-  }
-  
-  function hitEnemy() {
-    enemyHealth -= 1;
-    healthBar.style.width = (enemyHealth * 10) + '%';
-    enemy.classList.add('hit');
-    setTimeout(() => enemy.classList.remove('hit'), 100);
-    if (enemyHealth <= 0) {
-      enemy.classList.add('hit');
-      clearInterval(enemyMoveInterval);
-      clearInterval(enemyFireInterval);
-      enemy.style.backgroundImage = "url('media/3b.gif')";
-      audio.gameOver.play();
-      enemyMoveInterval = 0
-    }
-  }
-  
-  document.addEventListener('click', fireBullet);
-  document.addEventListener('mousemove', (e) => {
-    player1.style.top = e.clientY + 'px';
-  });
-  
-  window.addEventListener("click", () => {
-    startGame()
-    console.log("start!");
-  }, { once: true });
-</script>
+    <!-- setTimeout(function() { -->
+        <!-- popup.style.display = 'none'; -->
+        <!-- overlay.style.display = 'none'; -->
+    <!-- }, 5000); -->
+  <!-- }); -->
+<!-- </script> -->
 
 </body>
 </html>
