@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)https://polymetallic.co/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nocturnal Debris</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 50px;
+            margin: 0; /* Remove default margin */
+            -webkit-user-select:none;-moz-user-select:-moz-none;
+            -ms-user-select:none;user-select:none
+        }
+        :root {
+          --popup_bg_color: #0C0404;
+          --primary_color_1: #DFFF00;
+          --primary_color_2: #FFC300;
+        }
+        .title {
+            color: #DFFF00;
+            font-size: 2em;
+            #margin-bottom: 5px;
+        }
+        .score-board {
+          display: none;
+        }
+        .score {
+          color: var(--primary_color_1);
+        }
+        .guesses {
+          color: var(--primary_color_2);
+        }
+
+        .container {
+            text-align: center; /* Center the rows in the container */
+            font-family: monospace; /* Ensures that the whitespace is consistently sized */
+        }
+        .row {
+            line-height: 1.5; /* Adjusts the vertical spacing between rows */
+        }
+        .audio-file {
+            display: inline-block; /* Allows for normal white-space handling */
+            font-size: 12px; /* Start with a base font size */
+            position: relative; /* Needed for absolute positioning of the link */
+            padding-left:10px;
+            padding-right:10px;
+        }
+        .audio-file a {
+            color: transparent; /* Make the link text transparent */
+            text-decoration: none; /* No underline */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .audio-file:hover a {
+            color: inherit; /* Show the link on hover (optional) */
+        }
+        .deactivated-audiofile {
+            display: inline-block;
+            position: relative;
+            padding-left:10px;
+            padding-right:10px;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        /* Responsive styling for smaller screens */
+        @media (max-width: 600px) {
+            .audio-file {
+                font-size: 14px; /* Smaller font size on small screens */
+            }
+            body {
+                padding: 20px; /* Less padding on small screens */
+            }
+            .title {
+                font-size: 1.5em; /* Smaller title on small screens */
+            }
+        }
+        .popup {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          padding: 20px;
+          font-size: 16px;
+          background-color: #333;
+          color: #fff;
+          border-radius: 5px;
+          opacity: 1;
+          transition: opacity 1s ease-in-out;
+        }
+        .popup-form {
+          display: none;
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border: 1px solid #000;
+          border-radius : 20px;
+          padding: 10px;
+          #background-color: var(--popup_bg_color);
+          background-color: rgba(0,0,0,0.75);
+          z-index: 1000;
+        }
+        .popup-form a {
+          color: var (--primary_color_1);
+          background-color: transparent;
+          text-decoration: none;
+        }
+        .popup-form select {
+          padding: 8px;
+          margin: 15px;
+          #width: 300px;
+          background-color: var(--primary_color_2);
+          font-family: monospace;
+          #padding: 5px;
+          #border: 1px solid #ccc;
+          #border-radius: 4px;
+        }
+        .popup-form input {
+          padding: 8px;
+          margin: 15px;
+        }
+        .overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 999;
+        }
+        #correct-answer-gif {
+          position: fixed;
+          top: 10px;
+          left: 10px;
+          z-index: 100;
+          width: 10%;
+          display: none;
+        }
+        #wrong-answer-gif {
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          z-index: 100;
+          width: 10%;
+          display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="score-board" class="score-board"><span class="score">000</span> / <span class="guesses">000</span></div>
+    <!-- <br/> -->
+    <div class="title">Nocturnal Debris</div>
+    <br/>
+    <div class="container">
+      <!-- <div style="center; padding: 10px;">wait a few moments for all song links to load</div> -->
+      <div style="center; color:white">tap and hold → listen</div>
+      <div style="center; font-size:116% ;color: var(--primary_color_2);">double tap → guess</div>
+    </div>
+    <br/>
+    <img id="correct-answer-gif">
+    <img id="wrong-answer-gif">
+    <div class="overlay" id="overlay"></div>
+    <div class="popup-form" id="popup-form">
+      <!-- <label for="guessInput">guess:</label> -->
+      <select id="guessSelect" onchange="handleSubmitGuessSong()">
+      </select>
+      <!-- <input type="text" id="guessInput" size="32" autocomplete="off" /> -->
+      <!-- <a href="#" id="submit-button" onclick="handleSubmitGuessSong()">Submit</a> -->
+    </div>
