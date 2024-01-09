@@ -61,8 +61,8 @@ const slogans =
 [
 "We're all in this together",
 "Flatten the curve",
-"You may be done with the virus but the virus isn't done with you",
 "New normal",
+"You may be done with the virus but the virus isn't done with you",
 "Follow the science",
 "Safe and effective",
 "Pandemic of the unvaccinated",
@@ -89,6 +89,20 @@ function generateShuffledStack(N) {
 function preloadImage(imgUrl) {
   let img = new Image();
   img.src = imgUrl;
+}
+
+function preloadVideo(url) {
+  var video = document.createElement('video');
+  video.src = url;
+  video.preload = 'auto';
+  video.muted = true; // Mute the video to ensure it can autoplay when needed
+  video.style.display = 'none'; // Make the video element invisible
+
+  // Optionally, you can store the video element for later use
+  // For example, you can attach it to the window object or any other global object
+  // window.preloadedVideo = video;
+
+  video.load(); // Start preloading the video
 }
 
 window.ENEMIES = ENEMIES;
