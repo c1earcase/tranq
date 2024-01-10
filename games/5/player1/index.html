@@ -13,10 +13,11 @@
     font-family: 'Roboto', sans-serif;
   }
   .game {
-    background-image: url('media/bg_3.png');
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: cover;
+    #background-image: url('media/bg_3.png');
+    #background-position: right top;
+    #background-repeat: no-repeat;
+    #background-size: cover;
+    background: linear-gradient(to right, #FFFFFF , #393939);
   }
   .player1 {
     position: relative;
@@ -81,15 +82,15 @@
     width: 256px;
     height: 256px;
     position: absolute;
-    #background: rgba(0, 0, 0, 0.5);
-    #box-shadow: 0 0 8px 8px white inset;
   }
   .enemy video {
     width: 246px;
     height: 246px;
     transform: translate(5px, 5px);
     border-radius: 20%;
-    box-shadow: 2px 2px 20px 2px rgba(0,0,0,1);
+    #box-shadow: 2px 2px 20px 2px rgba(100,100,100,1);
+    box-shadow: 2px 2px 20px 2px rgba(39, 39, 39, 1);
+    #background: rgba(0, 0, 0, 0.5);
     object-fit: cover; /* This will handle video aspect ratios */
     #top: 50%;
     #left: 50%;
